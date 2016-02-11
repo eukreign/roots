@@ -1,16 +1,28 @@
 <?php
 /**
- * Roots includes
+ * Sage includes
+ *
+ * The $sage_includes array determines the code library included in your theme.
+ * Add or remove files to the array as needed. Supports child theme overrides.
+ *
+ * Please note that missing files will produce a fatal error.
+ *
+ * @link https://github.com/roots/sage/pull/1042
  */
-require_once locate_template('/lib/utils.php');           // Utility functions
-require_once locate_template('/lib/init.php');            // Initial theme setup and constants
-require_once locate_template('/lib/sidebar.php');         // Sidebar class
-require_once locate_template('/lib/config.php');          // Configuration
-require_once locate_template('/lib/activation.php');      // Theme activation
-require_once locate_template('/lib/cleanup.php');         // Cleanup
-require_once locate_template('/lib/nav.php');             // Custom nav modifications
-require_once locate_template('/lib/comments.php');        // Custom comments modifications
-require_once locate_template('/lib/rewrites.php');        // URL rewriting for assets
-require_once locate_template('/lib/widgets.php');         // Sidebars and widgets
-require_once locate_template('/lib/scripts.php');         // Scripts and stylesheets
-require_once locate_template('/lib/custom.php');          // Custom functions
+$sage_includes = [
+  'lib/assets.php',    // Scripts and stylesheets
+  'lib/extras.php',    // Custom functions
+  'lib/setup.php',     // Theme setup
+  'lib/titles.php',    // Page titles
+  'lib/wrapper.php',   // Theme wrapper class
+  'lib/customizer.php' // Theme customizer
+];
+
+foreach ($sage_includes as $file) {
+  if (!$filepath = locate_template($file)) {
+    trigger_error(sprintf(__('Error locating %s for inclusion', 'sage'), $file), E_USER_ERROR);
+  }
+
+  require_once $filepath;
+}
+unset($file, $filepath);
